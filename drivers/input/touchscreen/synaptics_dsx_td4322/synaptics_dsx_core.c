@@ -4125,7 +4125,6 @@ static int synaptics_rmi4_probe(struct platform_device *pdev)
 
 	/* tp_source default set to 0xFF (unknow) */
 	rmi4_data->tp_source = TP_SOURCE_UNKNOW;
-	rmi4_data->project_id = 0x00;
 
 	/* For TouchView TD4322 firmware upgrade -and repair- */
 	if (!strcmp(mdss_panel_name, "qcom,mdss_dsi_td4322_csot_fhd_cmd")) {
@@ -4136,10 +4135,8 @@ static int synaptics_rmi4_probe(struct platform_device *pdev)
 		rmi4_data->tp_source = TP_SOURCE_TRULY;
 	}
 
-	TP_LOGI("rmi4_data->project_id = 0x%02X, "
-		"rmi4_data->lcd_id = %d, "
+	TP_LOGI("rmi4_data->lcd_id = %d, "
 		"rmi4_data->tp_source = 0x%02X (%s)\n",
-		rmi4_data->project_id,
 		rmi4_data->lcd_id,
 		rmi4_data->tp_source,
 		rmi4_data->tp_source == TP_SOURCE_TRULY ? "Truly" :
