@@ -4087,6 +4087,9 @@ exit:
 }
 EXPORT_SYMBOL(synaptics_rmi4_new_function);
 
+#define MDSS_MAX_PANEL_LEN 256
+extern char mdss_panel_name[MDSS_MAX_PANEL_LEN];
+
 static int synaptics_rmi4_probe(struct platform_device *pdev)
 {
 	int retval;
@@ -4125,17 +4128,12 @@ static int synaptics_rmi4_probe(struct platform_device *pdev)
 	rmi4_data->project_id = 0x00;
 
 	/* For TouchView TD4322 firmware upgrade -and repair- */
-	if (of_machine_is_compatible("somc,nile")) {
-		if (of_machine_is_compatible("somc,pioneer")) {
-			rmi4_data->project_id = 0x01;
-			if (rmi4_data->lcd_id == 1)
-				rmi4_data->tp_source = TP_SOURCE_TRULY;
-			else if (rmi4_data->lcd_id == 0)
-				rmi4_data->tp_source = TP_SOURCE_CSOT;
-		} else if (of_machine_is_compatible("somc,discovery")) {
-			rmi4_data->project_id = 0x02;
-			rmi4_data->tp_source = TP_SOURCE_INX;
-		}
+	if (!strcmp(mdss_panel_name, "qcom,mdss_dsi_td4322_csot_fhd_cmd")) {
+		rmi4_data->tp_source = TP_SOURCE_CSOT;
+	} else if (!strcmp(mdss_panel_name, "qcom,mdss_dsi_td4322_innolux_fhd_cmd")) {
+		rmi4_data->tp_source = TP_SOURCE_INX;
+	} else if (!strcmp(mdss_panel_name, "qcom,mdss_dsi_td4322_truly_fhd_cmd")) {
+		rmi4_data->tp_source = TP_SOURCE_TRULY;
 	}
 
 	TP_LOGI("rmi4_data->project_id = 0x%02X, "

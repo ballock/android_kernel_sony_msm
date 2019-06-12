@@ -2999,6 +2999,9 @@ static struct device_node *mdss_dsi_pref_prim_panel(
 	return dsi_pan_node;
 }
 
+char mdss_panel_name[MDSS_MAX_PANEL_LEN] = {0};
+EXPORT_SYMBOL(mdss_panel_name);
+
 /**
  * mdss_dsi_find_panel_of_node(): find device node of dsi panel
  * @pdev: platform_device of the dsi ctrl node
@@ -3114,6 +3117,9 @@ static struct device_node *mdss_dsi_find_panel_of_node(
 				strlcpy(ctrl_pdata->panel_data.dsc_cfg_np_name,
 					cfg_np_name, MDSS_MAX_PANEL_LEN);
 			}
+
+			// store panel name for panel firmware upload
+			strlcpy(mdss_panel_name, panel_name, MDSS_MAX_PANEL_LEN);
 		}
 
 		return dsi_pan_node;
